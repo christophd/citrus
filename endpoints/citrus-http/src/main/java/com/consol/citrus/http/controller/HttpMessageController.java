@@ -21,18 +21,24 @@ import com.consol.citrus.endpoint.adapter.EmptyResponseEndpointAdapter;
 import com.consol.citrus.http.client.HttpEndpointConfiguration;
 import com.consol.citrus.http.message.HttpMessage;
 import com.consol.citrus.message.Message;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UrlPathHelper;
 
-import javax.servlet.http.*;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * Message controller implementation handling all incoming requests by forwarding to a message 
@@ -51,7 +57,7 @@ public class HttpMessageController {
     private HttpEndpointConfiguration endpointConfiguration = new HttpEndpointConfiguration();
 
     /** Hold the latest response message for message tracing reasons */
-    private ConcurrentLinkedQueue<ResponseEntity<?>> responseCache = new ConcurrentLinkedQueue<>();
+    private ResponseEntity<?> responseCache;
     
     @RequestMapping(value = "**", method = { RequestMethod.GET })
     @ResponseBody
@@ -169,7 +175,7 @@ public class HttpMessageController {
                 }
             }
         }
-        responseCache.add(responseEntity);
+        responseCache = responseEntity;
         
         return responseEntity;
     }
@@ -210,7 +216,7 @@ public class HttpMessageController {
      * Gets the responseCache.
      * @return the responseCache the responseCache to get.
      */
-    public ResponseEntity<?> getResponseCache() {
-        return responseCache.poll();
+    public ResponseEntity getResponseCache() {
+        return responseCache;
     }
 }
