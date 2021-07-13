@@ -16,6 +16,8 @@
 
 package com.consol.citrus.config.xml;
 
+import java.util.concurrent.TimeUnit;
+
 import com.consol.citrus.actions.SleepAction;
 import com.consol.citrus.config.util.BeanDefinitionParserUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -23,8 +25,6 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.w3c.dom.Element;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * Bean definition parser for sleep action in test case.
@@ -62,7 +62,7 @@ public class SleepActionParser implements BeanDefinitionParser {
         }
 
         public void setTime(String time) {
-            builder.time(time);
+            builder.time(time, TimeUnit.SECONDS);
         }
 
         @Override
