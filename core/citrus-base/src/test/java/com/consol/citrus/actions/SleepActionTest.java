@@ -58,6 +58,27 @@ public class SleepActionTest extends AbstractTestNGUnitTest {
     }
 
     @Test
+    public void testSleepDecimalValueSupport() {
+        SleepAction sleep = new SleepAction.Builder()
+                .time("500.0", TimeUnit.MILLISECONDS)
+                .build();
+
+        sleep.execute(context);
+
+        sleep = new SleepAction.Builder()
+                .time("0.5", TimeUnit.SECONDS)
+                .build();
+
+        sleep.execute(context);
+
+        sleep = new SleepAction.Builder()
+                .time("0.01", TimeUnit.MINUTES)
+                .build();
+
+        sleep.execute(context);
+    }
+
+    @Test
     public void testSleepLegacy() {
         SleepAction sleep = new SleepAction.Builder()
                 .seconds(0.1)

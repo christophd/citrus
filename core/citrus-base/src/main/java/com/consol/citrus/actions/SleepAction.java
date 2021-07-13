@@ -38,7 +38,7 @@ public class SleepAction extends AbstractTestAction {
     private final TimeUnit timeUnit;
 
     /** Logger */
-    private static Logger log = LoggerFactory.getLogger(SleepAction.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SleepAction.class);
 
     /**
      * Default constructor.
@@ -56,11 +56,28 @@ public class SleepAction extends AbstractTestAction {
         String duration = context.resolveDynamicValue(time);
 
         try {
-            log.info(String.format("Sleeping %s %s", duration, timeUnit.toString()));
+            LOG.info(String.format("Sleeping %s %s", duration, timeUnit));
 
-            timeUnit.sleep(Long.parseLong(duration));
+            if (duration.indexOf(".") > 0) {
+                switch (timeUnit) {
+                    case MILLISECONDS:
+                        TimeUnit.MILLISECONDS.sleep(Math.round(Double.parseDouble(duration)));
+                        break;
+                    case SECONDS:
+                        TimeUnit.MILLISECONDS.sleep(Math.round(Double.parseDouble(duration) * 1000));
+                        break;
+                    case MINUTES:
+                        TimeUnit.MILLISECONDS.sleep(Math.round(Double.parseDouble(duration) * 60 * 1000));
+                        break;
+                    default:
+                        throw new CitrusRuntimeException("Unsupported time expression for sleep action - " +
+                                "please use one of milliseconds, seconds, minutes");
+                }
+            } else {
+                timeUnit.sleep(Long.parseLong(duration));
+            }
 
-            log.info(String.format("Returning after %s %s", duration, timeUnit.toString()));
+            LOG.info(String.format("Returning after %s %s", duration, timeUnit));
         } catch (InterruptedException e) {
             throw new CitrusRuntimeException(e);
         }

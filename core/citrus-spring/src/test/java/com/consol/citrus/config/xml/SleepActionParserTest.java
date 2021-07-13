@@ -39,12 +39,12 @@ public class SleepActionParserTest extends AbstractActionParserTest<SleepAction>
         Assert.assertEquals(action.getTimeUnit(), TimeUnit.MILLISECONDS);
 
         action = getNextTestActionFromTest();
-        Assert.assertEquals(action.getTime(), "1500");
-        Assert.assertEquals(action.getTimeUnit(), TimeUnit.MILLISECONDS);
+        Assert.assertEquals(action.getTime(), "1.5");
+        Assert.assertEquals(action.getTimeUnit(), TimeUnit.SECONDS);
 
         action = getNextTestActionFromTest();
-        Assert.assertEquals(action.getTime(), "1500");
-        Assert.assertEquals(action.getTimeUnit(), TimeUnit.MILLISECONDS);
+        Assert.assertEquals(action.getTime(), "1.5");
+        Assert.assertEquals(action.getTimeUnit(), TimeUnit.SECONDS);
 
         action = getNextTestActionFromTest();
         Assert.assertEquals(action.getTime(), "1500");
